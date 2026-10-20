@@ -1,11 +1,20 @@
+// Isi dua nilai ini dari Supabase (Project Settings > API). Keduanya aman dibuat publik.
+const SUPABASE_URL = 'https://iyqzrimkwozozwguhwif.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml5cXpyaW1rd296b3p3Z3Vod2lmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI0OTQzNzQsImV4cCI6MjEwODA3MDM3NH0.arRMid6L1lqrkP41-wcpgF_WoExqYtBbwUpESVikF2U';
+
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 const API = '/api/transactions';
 const $ = (id) => document.getElementById(id);
 const rupiah = (n) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(n);
 const form = $('form');
 form.date.value = new Date().toISOString().slice(0, 10);
+let accessToken = null;
 
-async function api(url = API, options) {
-  const res = await fetch(url, options);
+async function api(url = API, options = {}) {
+  const res = await fetch(url, {
+    ...options,
+    headers: { ...(options.headers || {}), Authorization: 'Bearer ' + accessToken },
+  });
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || 'Terjadi kesalahan');
   return data;
@@ -72,4 +81,33 @@ form.addEventListener('submit', async (e) => {
   btn.disabled = false;
 });
 
-load();
+// ---------- Login ----------
+$('authForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const f = new FormData(e.target);
+  const { error } = await sb.auth.signInWithPassword({ email: f.get('email'), password: f.get('password') });
+  $('authError').textContent = error ? 'Email atau password salah.' : '';
+});
+
+$('signup').addEventListener('click', async () => {
+  const formEl = $('authForm');
+  if (!formEl.reportValidity()) return;
+  const f = new FormData(formEl);
+  const { data, error } = await sb.auth.signUp({ email: f.get('email'), password: f.get('password') });
+  if (error) $('authError').textContent = error.message;
+  else if (!data.session) $('authError').textContent = 'Akun dibuat. Cek email untuk konfirmasi, lalu masuk.';
+});
+
+$('logout').addEventListener('click', () => sb.auth.signOut());
+
+sb.auth.onAuthStateChange((_event, session) => {
+  accessToken = session ? session.access_token : null;
+  $('auth').hidden = !!session;
+  $('app').hidden = !session;
+  if (session) {
+    $('userEmail').textContent = session.user.email;
+    load();
+  } else {
+    $('list').replaceChildren();
+  }
+});
