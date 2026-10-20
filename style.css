@@ -37,3 +37,9 @@ li:last-child{border-bottom:0}
 .amt{font-weight:700;white-space:nowrap}
 .del{background:transparent;color:var(--muted);padding:6px 10px;border:1px solid var(--line);font-weight:500}
 .del:hover{color:var(--out);border-color:var(--out)}
+[hidden]{display:none !important}
+.auth{max-width:380px;margin:60px auto;padding:0 16px}
+.auth form{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:24px}
+.ghost{background:transparent;color:var(--ink);border:1px solid var(--line);font-weight:500}
+.userbar{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:16px}
+.userbar .ghost{padding:6px 12px}
