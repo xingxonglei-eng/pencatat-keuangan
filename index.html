@@ -10,8 +10,23 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <main class="layout">
+  <section id="auth" class="auth" hidden>
+    <form id="authForm">
+      <h2>Masuk untuk mencatat keuangan</h2>
+      <label>Email<input name="email" type="email" required autocomplete="email"></label>
+      <label>Password (minimal 6 karakter)<input name="password" type="password" minlength="6" required autocomplete="current-password"></label>
+      <button type="submit">Masuk</button>
+      <button type="button" id="signup" class="ghost">Buat akun baru</button>
+      <p id="authError" class="error" role="alert"></p>
+    </form>
+  </section>
+
+  <main class="layout" id="app" hidden>
     <section class="summary">
+      <div class="userbar">
+        <span id="userEmail" class="muted"></span>
+        <button type="button" id="logout" class="ghost">Keluar</button>
+      </div>
       <p class="muted">Saldo saat ini</p>
       <h1 id="balance">Rp 0</h1>
       <dl class="flows">
@@ -45,6 +60,8 @@
       <p id="empty" class="muted" hidden>Belum ada transaksi. Isi formulir di samping untuk mencatat yang pertama.</p>
     </section>
   </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.0/dist/umd/supabase.min.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
