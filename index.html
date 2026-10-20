@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Catatan Keuangan</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="layout">
+    <section class="summary">
+      <p class="muted">Saldo saat ini</p>
+      <h1 id="balance">Rp 0</h1>
+      <dl class="flows">
+        <div><dt>Pemasukan</dt><dd id="income" class="in">Rp 0</dd></div>
+        <div><dt>Pengeluaran</dt><dd id="expense" class="out">Rp 0</dd></div>
+      </dl>
+
+      <form id="form">
+        <h2>Catat transaksi</h2>
+        <div class="seg">
+          <label><input type="radio" name="type" value="expense" checked><span>Pengeluaran</span></label>
+          <label><input type="radio" name="type" value="income"><span>Pemasukan</span></label>
+        </div>
+        <label>Keterangan<input name="title" required maxlength="100" placeholder="Contoh: Makan siang"></label>
+        <label>Jumlah (Rp)<input name="amount" type="number" min="1" required inputmode="numeric" placeholder="25000"></label>
+        <label>Kategori
+          <select name="category">
+            <option>Makanan</option><option>Transportasi</option><option>Belanja</option>
+            <option>Tagihan</option><option>Gaji</option><option>Lainnya</option>
+          </select>
+        </label>
+        <label>Tanggal<input name="date" type="date" required></label>
+        <button type="submit">Simpan transaksi</button>
+        <p id="error" class="error" role="alert"></p>
+      </form>
+    </section>
+
+    <section class="history">
+      <h2>Riwayat</h2>
+      <ul id="list"></ul>
+      <p id="empty" class="muted" hidden>Belum ada transaksi. Isi formulir di samping untuk mencatat yang pertama.</p>
+    </section>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
